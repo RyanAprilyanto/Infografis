@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator JSON Infografis</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            /* Fallback font */
+            font-family: 'Outfit', sans-serif;
+            background-color: #f4f4f0;
+        }
+
+        .font-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Tema Neo-Brutalism */
+        .brutal-border {
+            border: 3px solid #000;
+        }
+        
+        .brutal-shadow {
+            box-shadow: 5px 5px 0px 0px #000;
+            transition: all 0.2s ease;
+        }
+        
+        .brutal-shadow:active {
+            box-shadow: 0px 0px 0px 0px #000;
+            transform: translate(5px, 5px);
+        }
+
+        .brutal-input {
+            border: 3px solid #000;
+            background-color: #fff;
+            padding: 10px;
+            font-weight: 500;
+            width: 100%;
+            outline: none;
+        }
+        
+        .brutal-input:focus {
+            background-color: #e2e8f0;
+        }
+
+        /* Scrollbar kustom */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff; 
+            border-left: 3px solid #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #000; 
+        }
+
+        /* Style untuk blok JSON */
+        pre {
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col md:flex-row overflow-hidden">
+
+    <!-- PANEL KIRI: FORM INPUT -->
+    <aside class="w-full md:w-1/2 bg-white brutal-border md:border-y-0 md:border-l-0 flex flex-col h-full z-10 relative">
+        
+        <!-- Header (Spacing Diperkecil & Font Outfit) -->
+        <div class="px-5 py-4 border-b-3 border-black bg-[#FFDE59]">
+            <h1 class="text-2xl sm:text-3xl font-black text-black flex items-center gap-2 m-0 p-0 leading-none tracking-tight">
+                <i data-lucide="braces" class="w-7 h-7 sm:w-8 sm:h-8 fill-black"></i> INFOGRAFIS GENERATOR
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-900 mt-1.5 leading-snug font-semibold">
+                Membuat format JSON terstruktur untuk bisa di download menggunakan Gemini AI, ChatGPT, Claude<br>
+                <span class="font-bold text-black block mt-0.5">ETD - Training Back Office</span>
+            </p>
+        </div>
+
+        <!-- Form Area -->
+        <div class="p-4 sm:p-5 flex-1 overflow-y-auto bg-[#f0f0f0]" id="form-container">
+            
+            <!-- 1. Training -->
+            <div class="bg-white p-4 brutal-border brutal-shadow mb-5">
+                <label class="block text-base sm:text-lg font-black font-title mb-2 uppercase">1. TRAINING</label>
+                <input type="text" id="input-training" class="brutal-input text-sm sm:text-base w-full" placeholder="Cth: Pelatihan Basic Service" oninput="generateJSON()">
+            </div>
+
+            <!-- 2. Judul Materi -->
+            <div class="bg-white p-4 brutal-border brutal-shadow mb-5">
+                <label class="block text-base sm:text-lg font-black font-title mb-2 uppercase">2. JUDUL MATERI</label>
+                <input type="text" id="input-topic" class="brutal-input text-sm sm:text-base w-full" placeholder="Cth: Cara Berkomunikasi Efektif" oninput="generateJSON()">
+            </div>
+
+            <!-- 3. Vibe Visual -->
+            <div class="bg-[#FF9000] p-4 brutal-border brutal-shadow mb-5">
+                <label class="block text-base sm:text-lg font-black font-title mb-3 uppercase">3. VIBE VISUAL</label>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold mb-1 uppercase">Warna Latar</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="input-color1" class="w-10 h-10 sm:w-12 sm:h-12 p-0 border-2 sm:border-3 border-black cursor-pointer" value="#03ADD8" onchange="generateJSON()">
+                            <input type="text" id="text-color1" class="brutal-input flex-1 text-xs sm:text-sm h-10 sm:h-12" value="#03ADD8" readonly>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold mb-1 uppercase">Warna Aksen</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="input-color2" class="w-10 h-10 sm:w-12 sm:h-12 p-0 border-2 sm:border-3 border-black cursor-pointer" value="#FFDE59" onchange="generateJSON()">
+                            <input type="text" id="text-color2" class="brutal-input flex-1 text-xs sm:text-sm h-10 sm:h-12" value="#FFDE59" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold mb-1 uppercase">Gaya Ikon</label>
+                        <select id="input-icon-style" class="brutal-input text-xs sm:text-sm w-full cursor-pointer" onchange="generateJSON()">
+                            <option value="3D Clay">3D Clay</option>
+                            <option value="Y2K Aesthetic">Y2K Aesthetic</option>
+                            <option value="Minimalist Outline">Minimalist Outline</option>
+                            <option value="Comic Style">Comic Style</option>
+                            <option value="Pixel Art">Pixel Art</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold mb-1 uppercase">Gaya Desain</label>
+                        <select id="input-design" class="brutal-input text-xs sm:text-sm w-full cursor-pointer" onchange="generateJSON()">
+                            <option value="Neo Brutalism">Neo Brutalism</option>
+                            <option value="Cyberpunk">Cyberpunk</option>
+                            <option value="Pop Art">Pop Art</option>
+                            <option value="Clean Tech">Clean Tech</option>
+                            <option value="Playful">Playful</option>
+                            <option value="Professional">Professional</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Isi Materi -->
+            <div class="bg-[#FF90E8] p-4 brutal-border brutal-shadow mb-5">
+                <label class="block text-base sm:text-lg font-black font-title mb-2 uppercase">4. ISI MATERI</label>
+                <textarea id="input-material" rows="8" class="brutal-input text-sm sm:text-base w-full resize-y" placeholder="Paste materi deskriptif panjangmu di sini. Biarkan AI yang akan merangkum dan membaginya..." oninput="generateJSON()"></textarea>
+            </div>
+
+        </div>
+    </aside>
+
+    <!-- PANEL KANAN: OUTPUT JSON -->
+    <main class="w-full md:w-1/2 flex flex-col h-full bg-gray-900 relative">
+        
+        <!-- Header JSON -->
+        <div class="p-4 bg-black border-b border-gray-700 flex justify-between items-center z-10">
+            <h2 class="text-xl font-bold font-title text-green-400 flex items-center gap-2">
+                <i data-lucide="code-2"></i> HASIL JSON
+            </h2>
+            <button id="btn-copy" onclick="copyJSON()" class="bg-green-500 hover:bg-green-400 text-black font-black font-title py-2 px-4 border-2 border-green-500 hover:border-white transition-colors flex items-center gap-2 text-sm">
+                <i data-lucide="copy" class="w-4 h-4"></i> SALIN JSON
+            </button>
+        </div>
+
+        <!-- Area Kode JSON -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 relative">
+            <pre id="json-output" class="text-green-400 font-mono text-sm leading-relaxed" style="font-family: 'Courier New', Courier, monospace;"></pre>
+        </div>
+
+        <!-- Notifikasi Copy (Tersembunyi by default) -->
+        <div id="copy-toast" class="absolute bottom-5 right-5 bg-green-500 text-black font-bold px-4 py-2 brutal-border brutal-shadow transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50">
+            JSON Berhasil Disalin!
+        </div>
+    </main>
+
+    <script>
+        // Inisialisasi ikon Lucide
+        // Update Text Input Warna saat Color Picker berubah (dengan proteksi opsional)
+        document.getElementById('input-color1')?.addEventListener('input', (e) => {
+            const txtColor1 = document.getElementById('text-color1');
+            if(txtColor1) txtColor1.value = e.target.value.toUpperCase();
+        });
+        document.getElementById('input-color2')?.addEventListener('input', (e) => {
+            const txtColor2 = document.getElementById('text-color2');
+            if(txtColor2) txtColor2.value = e.target.value.toUpperCase();
+        });
+
+        // Fungsi utama merakit JSON secara real-time
+        function generateJSON() {
+            const training = document.getElementById('input-training')?.value || "[Masukkan Nama Training]";
+            const topic = document.getElementById('input-topic')?.value || "[Masukkan Judul Materi Anda]";
+            const material = document.getElementById('input-material')?.value || "[Materi Anda akan muncul di sini...]";
+            const color1 = document.getElementById('input-color1')?.value.toUpperCase() || "#03ADD8";
+            const color2 = document.getElementById('input-color2')?.value.toUpperCase() || "#FFDE59";
+            const iconStyle = document.getElementById('input-icon-style')?.value || "3D Clay";
+            const designStyle = document.getElementById('input-design')?.value || "Neo Brutalism";
+
+            // Struktur JSON yang akan disalin pengguna
+            const jsonStructure = {
+                "nama_training": training,
+                "judul_materi": topic,
+                "isi_materi": material,
+                "format_kanvas": "WAJIB Portrait / Vertikal (Aspect Ratio 9:16, proporsi layar HP). DILARANG KERAS menggunakan format landscape atau persegi.",
+                "gaya_visual": {
+                    "dominan_warna": `${color1} (Background), ${color2} (Aksen)`,
+                    "gaya_ikon": iconStyle,
+                    "gaya_desain": designStyle
+                },
+                "aturan_redaksional_wajib": {
+                    "1_margin_dan_layout": "WAJIB berikan 'Safe Area' atau margin frame di sekeliling gambar. Jangan sampai ada teks atau objek yang menyentuh ujung kanvas. Beri jarak proporsional antar paragraf.",
+                    "2_hierarki_tipografi_golden_ratio": "Terapkan skala hierarki font yang tegas (contoh rasio: Judul 24pt, Sub-judul 12pt, Teks Isi 6pt). Judul harus jauh lebih besar dari teks isi.",
+                    "3_kombinasi_font": "Gunakan 2-3 jenis font maksimal. Prioritaskan SANS-SERIF tebal (seperti Montserrat/Bebas/Coolvetica) untuk JUDUL agar mudah dibaca. Gunakan SANS-SERIF bersih atau SERIF untuk teks isi."
+                }
+            };
+
+            // Tampilkan ke layar dengan indentasi 4 spasi agar rapi
+            document.getElementById('json-output').textContent = JSON.stringify(jsonStructure, null, 4);
+        }
+
+        // Fungsi untuk menyalin teks JSON ke clipboard
+        function copyJSON() {
+            const jsonText = document.getElementById('json-output').textContent;
+            
+            // Menggunakan API Clipboard modern
+            navigator.clipboard.writeText(jsonText).then(() => {
+                showToast();
+            }).catch(err => {
+                // Fallback untuk browser lama/iframe
+                const textArea = document.createElement("textarea");
+                textArea.value = jsonText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Gagal menyalin', err);
+                    alert("Gagal menyalin JSON. Silakan salin manual.");
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Fungsi menampilkan notifikasi
+        function showToast() {
+            const toast = document.getElementById('copy-toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            // Ubah teks tombol sementara
+            const btn = document.getElementById('btn-copy');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> TERSALIN`;
+            btn.classList.replace('bg-green-500', 'bg-white');
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                btn.innerHTML = originalHTML;
+                btn.classList.replace('bg-white', 'bg-green-500');
+                lucide.createIcons();
+            }, 2500);
+        }
+
+        // Render JSON pertama kali saat halaman dimuat
+        window.onload = () => {
+            generateJSON();
+        };
+    </script>
+</body>
+</html>
